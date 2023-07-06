@@ -1,39 +1,37 @@
+import csv
 import os
-import pandas as pd
-import fileinput
 
-def get_BOM_Stock():
+def read_csv_file(file_path):
+    data = []
+    with open(file_path, 'r') as file:
+        csv_reader = csv.DictReader(file)
+        for row in csv_reader:
+            quantity = row['Quantity']
+            manf = row['manf#']
+            if manf:  # Skip rows where 'manf' value is empty
+                data.append([manf, quantity])
+    return data
 
-    # Prompt the user to enter the path of the Excel file
-    stock_path = input("Enter the path of the Excel file: ")
-    stock_path = stock_path.replace("& '", "").replace("'", "")
-
-    # Check if the file exists
-    if not os.path.isfile(stock_path):
-        print("File not found!")
-        exit()
-
-    # Read the Excel file using pandas
-    Stock = pd.read_excel(stock_path)
-
-    # Prompt the user to enter the path of the CSV file
-    BOM_path = input("Enter the path of the CSV BOM file: ")
-    BOM_path = stock_path.replace("& '", "").replace("'", "")
-
-    # Check if the file exists
-    if not os.path.isfile(BOM_path):
-        print("File not found!")
-        exit()
-
-    # Read the CSV file using pandas
-    BOM = pd.read_csv(BOM_path)
-
-    return BOM, Stock
-
+def write_csv_file(file_path, data):
+    directory = os.path.dirname(file_path)
+    output_file = os.path.join(directory, 'BOM_FOUND.csv')
+    with open(output_file, 'w', newline='') as file:
+        writer = csv.writer(file)
+        header = ['manf#', 'Quantity']
+        writer.writerow(list(header))
+        writer.writerows(data)
+    print("The 'BOM_FOUND.csv' file has been created.")
 
 def main():
+    # Prompt the user to enter the local path of the CSV file
+    file_path = input("Enter the local path of the CSV file: ")
+    file_path = file_path.strip("& '")
 
-    BOM, STOCK = get_BOM_Stock()
+    # Read the CSV file and store the content of 'quantity' and 'manf' columns in a 2D array
+    csv_data = read_csv_file(file_path)
+
+    # Write the 2D array into a CSV file named 'BOM_FOUND' at the same path as the opened CSV file
+    write_csv_file(file_path, csv_data)
 
 
 #**********************************************#
