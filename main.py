@@ -50,17 +50,23 @@ def write_xlsx_file(file_path, data):
 
 
 def main():
-    # Prompt
+    # Prompt CSV BOM file path
     BOM_CSV_Path = input("Enter the local path of the BOM CSV file: ")
     BOM_CSV_Path = BOM_CSV_Path.strip("& '")
 
+    # Prompt XLSX stock file path
     STOCK_XLSX_Path = input("Enter the local path of the STOCK XLSX file: ")
     STOCK_XLSX_Path = STOCK_XLSX_Path.strip("& '")
 
-    # Read the CSV file and store the content of 'quantity' and 'manf' columns in a 2D array
+    # Prompt the number of fabricated boards
+    # Number_of_boards = input("Enter the number of fabricated boards: ")
+
+    # Read the BOM file and store the content of 'quantity' and 'manf' columns in a 2D array
     BOM_DATA = read_csv_file(BOM_CSV_Path)
 
-    # Read the XLSX file and store its content in an array
+
+
+    # Read the XLSX file and store its content in a 2D array
     STOCK_DATA = read_xlsx_file(STOCK_XLSX_Path)
 
     for row in STOCK_DATA:
@@ -76,7 +82,7 @@ def main():
         print(row)
 
     # # Write the 2D array into a CSV file named 'BOM_FOUND' at the same path as the opened CSV file
-    # Number_of_boards = input("Enter the number of fabricated boards: ")
+
     # write_csv_file(BOM_CSV_Path, BOM_DATA, Number_of_boards)
 
 #**********************************************#
